@@ -11,6 +11,10 @@ Handles the primary functions
 import sys
 import argparse
 
+IO_ERROR = 2
+SUCCESS = 0
+
+
 
 def warning(*objs):
     """Writes a message to stderr."""
@@ -52,25 +56,25 @@ def parse_cmdline(argv):
     parser = argparse.ArgumentParser()
     # parser.add_argument("-i", "--input_rates", help="The location of the input rates file",
     #                     default=DEF_IRATE_FILE, type=read_input_rates)
-    parser.add_argument("-n", "--no_attribution", help="Whether to include attribution",
-                        action='store_false')
+    parser.add_argument("-d", "--excel_data_file", help="The location of excel file of OTU data",
+                        default=DEF_DATA_FILE)
     args = None
     try:
         args = parser.parse_args(argv)
     except IOError as e:
         warning("Problems reading file:", e)
         parser.print_help()
-        return args, 2
+        return args, IO_ERROR
 
-    return args, 0
+    return args, SUCCESS
 
 
 def main(argv=None):
     args, ret = parse_cmdline(argv)
-    if ret != 0:
+    if ret != SUCCESS:
         return ret
     print(canvas(args.no_attribution))
-    return 0  # success
+    return SUCCESS  # success
 
 
 if __name__ == "__main__":
