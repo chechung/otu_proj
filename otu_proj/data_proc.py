@@ -29,6 +29,7 @@ import matplotlib.pyplot as plt
 import os
 
 SUCCESS = 0
+INVALID_DATA = 1
 IO_ERROR = 2
 
 DEF_DATA_FILE = 'data/OTU_data.xlsx'
@@ -159,6 +160,10 @@ def parse_cmdline(argv):
         warning("Problems reading file:", e)
         parser.print_help()
         return args, IO_ERROR
+    except ValueError as e:
+        warning("Read invalid data:", e)
+        parser.print_help()
+        return args, INVALID_DATA
 
     return args, SUCCESS
 
